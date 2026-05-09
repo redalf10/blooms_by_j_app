@@ -1,28 +1,28 @@
 import { Review } from '../entities/Review.js';
 import { db } from './FirebaseConfig.js';
-import { 
-  collection, 
-  addDoc, 
-  getDocs, 
-  query, 
-  orderBy 
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 export class ReviewRepository {
   constructor() {
     this.reviewsCollection = collection(db, 'reviews');
-    this.imgbbKey = "3da307374b3d3126742617f6990428bc"; // Your ImgBB API Key
+    this.imgbbKey = "2a39affed72333253013d8e62e2923d0"; // Your ImgBB API Key
   }
 
   async uploadToImgBB(file) {
     const formData = new FormData();
     formData.append('image', file);
-    
+
     const response = await fetch(`https://api.imgbb.com/1/upload?key=${this.imgbbKey}`, {
       method: 'POST',
       body: formData
     });
-    
+
     const data = await response.json();
     if (data.success) {
       return data.data.url;
@@ -45,7 +45,7 @@ export class ReviewRepository {
         rating: review.rating,
         comment: review.comment,
         imageUrl: imageUrl,
-        date: review.date.toISOString ? review.date.toISOString() : new Date().toISOString()
+        date: new Date().toISOString()
       });
       return docRef.id;
     } catch (error) {
@@ -59,7 +59,7 @@ export class ReviewRepository {
       const q = query(this.reviewsCollection, orderBy('date', 'desc'));
       const snapshot = await getDocs(q);
       const reviews = [];
-      
+
       snapshot.forEach(doc => {
         const data = doc.data();
         reviews.push(new Review({ ...data, id: doc.id }));
