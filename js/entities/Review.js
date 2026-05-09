@@ -1,5 +1,5 @@
 export class Review {
-  constructor({ id, name, email, rating, comment, date = new Date(), avatar = null }) {
+  constructor({ id, name, email, rating, comment, date = new Date(), avatar = null, imageUrl = null }) {
     this.id = id || Date.now();
     this.name = name;
     this.email = email;
@@ -7,5 +7,6 @@ export class Review {
     this.comment = comment;
     this.date = date;
     this.avatar = avatar;
+    this.imageUrl = imageUrl;
   }
 }

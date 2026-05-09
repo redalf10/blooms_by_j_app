@@ -1,0 +1,47 @@
+query ListAllFlowerSpecies @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
+  flowerSpeciess {
+    id
+    commonName
+    scientificName
+    bloomingSeason
+    imageUrl
+    description
+  }
+}
+
+query GetCurrentUserProfile @auth(level: USER) {
+  user(key: {id_expr: "auth.uid"}) {
+    id
+    username
+    email
+    displayName
+    bio
+    profilePictureUrl
+    createdAt
+  }
+}
+
+mutation CreateUserPost($imageUrl: String!, $caption: String, $location: String, $isIdentified: Boolean, $identifiedSpeciesId: UUID) @auth(level: USER) {
+  post_insert(data: {
+    imageUrl: $imageUrl,
+    caption: $caption,
+    location: $location,
+    isIdentified: $isIdentified,
+    identifiedSpeciesId: $identifiedSpeciesId,
+    createdAt_expr: "request.time",
+    authorId_expr: "auth.uid"
+  })
+}
+
+mutation AddUserCollectionEntry($dateFound: Date!, $acquisitionType: String!, $notes: String, $locationFound: String, $photoUrl: String, $flowerSpeciesId: UUID) @auth(level: USER) {
+  collectionEntry_insert(data: {
+    createdAt_expr: "request.time",
+    dateFound: $dateFound,
+    acquisitionType: $acquisitionType,
+    notes: $notes,
+    locationFound: $locationFound,
+    photoUrl: $photoUrl,
+    flowerSpeciesId: $flowerSpeciesId,
+    ownerId_expr: "auth.uid"
+  })
+}

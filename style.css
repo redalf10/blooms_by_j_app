@@ -1095,4 +1095,23 @@
   .star.active, .star:hover {
     color: var(--rose);
     transform: scale(1.1);
-  }
+  }
+
+  /* Review Images */
+  .review-img-wrap {
+    margin: 1rem 0;
+    border-radius: 4px;
+    overflow: hidden;
+    max-width: 200px;
+    border: 1px solid var(--rose-pale);
+  }
+  .review-feed-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s;
+  }
+  .review-feed-img:hover {
+    transform: scale(1.05);
+  }
+

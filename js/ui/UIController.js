@@ -17,7 +17,8 @@ export class UIController {
       reviewForm: document.getElementById('reviewForm'),
       starsInput: document.getElementById('starsInput'),
       ratingValue: document.getElementById('ratingValue'),
-      reviewsFeed: document.getElementById('reviewsFeed')
+      reviewsFeed: document.getElementById('reviewsFeed'),
+      reviewImage: document.getElementById('reviewImage')
     };
 
     this.init();
@@ -117,8 +118,11 @@ export class UIController {
         comment: document.getElementById('reviewComment').value
       };
 
+      const imageFile = this.elements.reviewImage?.files[0] || null;
+
       try {
-        await this.reviewService.submitReview(reviewData);
+        this.showToast('✨ Uploading your review...');
+        await this.reviewService.submitReview(reviewData, imageFile);
         this.showToast('🌸 Thank you for your review!');
         this.elements.reviewForm.reset();
         // Reset stars
@@ -226,6 +230,11 @@ export class UIController {
       <div class="testi-card reveal visible" style="animation-delay:${i * 0.1}s">
         <div class="testi-quote">"</div>
         <p class="testi-text">${r.comment}</p>
+        ${r.imageUrl ? `
+          <div class="review-img-wrap">
+            <img src="${r.imageUrl}" alt="Review Photo" class="review-feed-img">
+          </div>
+        ` : ''}
         <div class="testi-author">
           <div class="testi-avatar">${r.name.substring(0, 2).toUpperCase()}</div>
           <div>

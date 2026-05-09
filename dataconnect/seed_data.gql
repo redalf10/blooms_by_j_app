@@ -1,0 +1,118 @@
+mutation SeedData @transaction @auth(level: PUBLIC, insecureReason: "Seed data is publicly accessible for populating the database with initial content.") {
+  user_insertMany(data: [
+    {
+      id: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+      username: "bloomsbyj",
+      email: "bloomsbyj@example.com",
+      createdAt: "2023-01-01T10:00:00Z",
+      displayName: "Blooms by J",
+      bio: "Creator of beautiful floral arrangements.",
+      profilePictureUrl: "https://example.com/profile1.jpg"
+    },
+    {
+      id: "b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12",
+      username: "flowerlover123",
+      email: "flowerlover123@example.com",
+      createdAt: "2023-01-02T11:00:00Z",
+      displayName: "Flora Enthusiast",
+      bio: "Passionate about all things botanical.",
+      profilePictureUrl: "https://example.com/profile2.jpg"
+    }
+  ])
+  flowerSpecies_insertMany(data: [
+    {
+      id: "c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13",
+      commonName: "Rose",
+      scientificName: "Rosa gallica",
+      createdAt: "2023-01-03T12:00:00Z",
+      description: "A classic and fragrant flower, often a symbol of love.",
+      imageUrl: "https://example.com/rose.jpg",
+      bloomingSeason: "Spring to Fall",
+      careInstructions: "Requires full sun and well-drained soil."
+    },
+    {
+      id: "d0eebc99-9c0b-4ef8-bb6d-6bb9bd380a14",
+      commonName: "Sunflower",
+      scientificName: "Helianthus annuus",
+      createdAt: "2023-01-04T13:00:00Z",
+      description: "Tall, yellow flowers that turn to face the sun.",
+      imageUrl: "https://example.com/sunflower.jpg",
+      bloomingSeason: "Summer",
+      careInstructions: "Needs plenty of sunlight and space."
+    }
+  ])
+  post_insertMany(data: [
+    {
+      id: "e0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15",
+      imageUrl: "https://example.com/rose_post.jpg",
+      createdAt: "2023-01-05T14:00:00Z",
+      caption: "Beautiful roses from my garden!",
+      location: "My Garden",
+      isIdentified: true,
+      author: { id: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11" },
+      identifiedSpecies: { id: "c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13" }
+    },
+    {
+      id: "f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a16",
+      imageUrl: "https://example.com/sunflower_field.jpg",
+      createdAt: "2023-01-06T15:00:00Z",
+      caption: "A field full of happy sunflowers!",
+      location: "Local Farm",
+      isIdentified: true,
+      author: { id: "b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12" },
+      identifiedSpecies: { id: "d0eebc99-9c0b-4ef8-bb6d-6bb9bd380a14" }
+    }
+  ])
+  comment_insertMany(data: [
+    {
+      id: "g0eebc99-9c0b-4ef8-bb6d-6bb9bd380a17",
+      text: "These are stunning!",
+      createdAt: "2023-01-07T16:00:00Z",
+      author: { id: "b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12" },
+      post: { id: "e0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15" }
+    },
+    {
+      id: "h0eebc99-9c0b-4ef8-bb6d-6bb9bd380a18",
+      text: "What a vibrant display!",
+      createdAt: "2023-01-08T17:00:00Z",
+      author: { id: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11" },
+      post: { id: "f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a16" }
+    }
+  ])
+  like_insertMany(data: [
+    {
+      createdAt: "2023-01-09T18:00:00Z",
+      user: { id: "b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12" },
+      post: { id: "e0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15" }
+    },
+    {
+      createdAt: "2023-01-10T19:00:00Z",
+      user: { id: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11" },
+      post: { id: "f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a16" }
+    }
+  ])
+  collectionEntry_insertMany(data: [
+    {
+      id: "i0eebc99-9c0b-4ef8-bb6d-6bb9bd380a19",
+      createdAt: "2023-01-11T20:00:00Z",
+      dateFound: "2023-01-11",
+      acquisitionType: "Wild Foraging",
+      notes: "Found near a riverbank. Very healthy.",
+      locationFound: "Riverbank Trail",
+      photoUrl: "https://example.com/collected_rose.jpg",
+      owner: { id: "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11" },
+      flowerSpecies: { id: "c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13" }
+    },
+    {
+      id: "j0eebc99-9c0b-4ef8-bb6d-6bb9bd380a20",
+      createdAt: "2023-01-12T21:00:00Z",
+      dateFound: "2023-01-12",
+      acquisitionType: "Purchased Seed",
+      notes: "Grown from seed, first bloom.",
+      locationFound: "Home Garden",
+      photoUrl: "https://example.com/grown_sunflower.jpg",
+      owner: { id: "b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12" },
+      flowerSpecies: { id: "d0eebc99-9c0b-4ef8-bb6d-6bb9bd380a14" }
+    }
+  ])
+}

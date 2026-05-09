@@ -1,0 +1,52 @@
+type User @table {
+  username: String!
+  email: String!
+  createdAt: Timestamp!
+  displayName: String
+  bio: String
+  profilePictureUrl: String
+}
+
+type FlowerSpecies @table {
+  commonName: String!
+  scientificName: String!
+  createdAt: Timestamp!
+  description: String
+  imageUrl: String
+  bloomingSeason: String
+  careInstructions: String
+}
+
+type Post @table {
+  imageUrl: String!
+  createdAt: Timestamp!
+  caption: String
+  location: String
+  isIdentified: Boolean
+  author: User
+  identifiedSpecies: FlowerSpecies
+}
+
+type CollectionEntry @table {
+  createdAt: Timestamp!
+  dateFound: Date!
+  acquisitionType: String!
+  notes: String
+  locationFound: String
+  photoUrl: String
+  owner: User
+  flowerSpecies: FlowerSpecies
+}
+
+type Comment @table {
+  text: String!
+  createdAt: Timestamp!
+  author: User
+  post: Post
+}
+
+type Like @table(key: ["user", "post"]) {
+  createdAt: Timestamp!
+  user: User!
+  post: Post!
+}
