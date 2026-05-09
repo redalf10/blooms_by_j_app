@@ -1,29 +1,55 @@
 import { Review } from '../entities/Review.js';
+import { db } from './FirebaseConfig.js';
+import { 
+  collection, 
+  addDoc, 
+  getDocs, 
+  query, 
+  orderBy 
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 export class ReviewRepository {
   constructor() {
-    this.storageKey = 'bloom_by_j_reviews';
+    this.reviewsCollection = collection(db, 'reviews');
   }
 
   async saveReview(review) {
-    const reviews = await this.getAllReviews();
-    reviews.push(review);
-    localStorage.setItem(this.storageKey, JSON.stringify(reviews));
-    return true;
+    try {
+      const docRef = await addDoc(this.reviewsCollection, {
+        name: review.name,
+        email: review.email,
+        rating: review.rating,
+        comment: review.comment,
+        date: review.date.toISOString ? review.date.toISOString() : new Date().toISOString()
+      });
+      return docRef.id;
+    } catch (error) {
+      console.error("Error adding review: ", error);
+      throw new Error("Failed to save review to cloud database.");
+    }
   }
 
   async getAllReviews() {
-    const data = localStorage.getItem(this.storageKey);
-    const reviews = data ? JSON.parse(data) : [];
-    // If no reviews, add some default ones to make it look "populated"
-    if (reviews.length === 0) {
-      const defaults = [
-        { name: "Maria A.", rating: 5, comment: "Absolutely magical arrangements! J is an artist.", date: new Date().toISOString() },
-        { name: "Rica C.", rating: 4, comment: "Fresh and beautiful, though delivery was slightly delayed. Still the best!", date: new Date().toISOString() }
-      ];
-      localStorage.setItem(this.storageKey, JSON.stringify(defaults));
-      return defaults.map(r => new Review(r));
+    try {
+      const q = query(this.reviewsCollection, orderBy('date', 'desc'));
+      const snapshot = await getDocs(q);
+      const reviews = [];
+      
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        reviews.push(new Review({ ...data, id: doc.id }));
+      });
+
+      if (reviews.length === 0) {
+        return [
+          new Review({ name: "Bloom by J", rating: 5, comment: "Welcome! Be the first to leave a review! 🌸", date: new Date().toISOString() })
+        ];
+      }
+
+      return reviews;
+    } catch (error) {
+      console.error("Error getting reviews: ", error);
+      return [];
     }
-    return reviews.map(r => new Review(r));
   }
 }
