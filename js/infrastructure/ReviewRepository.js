@@ -49,8 +49,8 @@ export class ReviewRepository {
       });
       return docRef.id;
     } catch (error) {
-      console.error("Error adding review: ", error);
-      throw new Error("Failed to save review. Please try again.");
+      console.error("Detailed Error:", error);
+      throw new Error(`Failed to save review: ${error.message}`);
     }
   }
 
